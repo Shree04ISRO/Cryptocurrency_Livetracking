@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptocurrency Tracker - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Auth Pages Styles */
+        .auth-container {
+            max-width: 450px;
+            margin: 50px auto;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-header h1 {
+            color: #667eea;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-primary {
+            width: 100%;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .auth-switch a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .alert-error {
+            background: #fee;
+            color: #c33;
+            border: 1px solid #fcc;
+        }
+
+        .alert-success {
+            background: #efe;
+            color: #3c3;
+            border: 1px solid #cfc;
+        }
+
+        /* Dashboard Styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .welcome-msg {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .welcome-msg strong {
+            color: #333;
+        }
+
+        .btn-logout {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ff4444;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            animation: pulse 2s infinite;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stat-item strong {
+            color: #333;
+        }
+
+        .controls {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-group label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .control-group select,
+        .control-group input {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #667eea;
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr {
+            transition: background 0.3s;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .trend-up {
+            color: #22c55e;
+            font-size: 18px;
+        }
+
+        .trend-down {
+            color: #ef4444;
+            font-size: 18px;
+        }
+
+        .trend-neutral {
+            color: #94a3b8;
+            font-size: 18px;
+        }
+
+        .positive {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .negative {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .highlight-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .highlight-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .highlight-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .coin-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>🔷 Crypto Tracker</h1>
+                <p>Sign in to your account</p>
+            </div>
+            <div id="loginAlert" class="alert alert-error hidden"></div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn-primary">Sign In</button>
+            </form>
+            <div class="auth-switch">
+                Don't have an account? <a onclick="showRegister()">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Registration Page -->
+    <div id="registerPage" class="auth-container hidden">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>🔷 Crypto Tracker</h1>
+                <p>Create your account</p>
+            </div>
+            <div id="registerAlert" class="alert alert-error hidden"></div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="registerName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="registerEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" placeholder="Create a password (min 6 characters)" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="registerConfirmPassword" placeholder="Confirm your password" required minlength="6">
+                </div>
+                <button type="submit" class="btn-primary">Create Account</button>
+            </form>
+            <div class="auth-switch">
+                Already have an account? <a onclick="showLogin()">Sign In</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="container hidden">
+        <div class="header">
+            <div class="header-top">
+                <h1>
+                    🔷 Cryptocurrency Price Tracker
+                    <span class="live-indicator">
+                        <span class="live-dot"></span>
+                        LIVE
+                    </span>
+                </h1>
+                <div class="user-info">
+                    <div class="welcome-msg">
+                        Welcome, <strong id="userName"></strong>!
+                    </div>
+                    <button class="btn-logout" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <strong>Last Updated:</strong> <span id="lastUpdate">-</span>
+                </div>
+                <div class="stat-item">
+                    <strong>Updates:</strong> <span id="updateCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <strong>Next Update:</strong> <span id="nextUpdate">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>Coins:</label>
+                <select id="numCoins">
+                    <option value="5">Top 5</option>
+                    <option value="10" selected>Top 10</option>
+                    <option value="20">Top 20</option>
+                    <option value="50">Top 50</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>Refresh:</label>
+                <select id="refreshInterval">
+                    <option value="15">15 seconds</option>
+                    <option value="30" selected>30 seconds</option>
+                    <option value="60">60 seconds</option>
+                    <option value="120">2 minutes</option>
+                </select>
+            </div>
+            <button id="refreshBtn" onclick="fetchData()">Refresh Now</button>
+            <button id="toggleBtn" onclick="toggleAutoRefresh()">Pause</button>
+            <button onclick="downloadCSV()">Download CSV</button>
+        </div>
+
+        <div id="errorMsg" class="error hidden"></div>
+
+        <div class="main-content">
+            <div id="loading" class="loading">Loading cryptocurrency data...</div>
+            <table id="dataTable" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Coin</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Trend</th>
+                        <th>24h Change</th>
+                        <th>Market Cap</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="highlights">
+            <div class="highlight-card">
+                <h3>🟢 Top 5 Gainers (24h)</h3>
+                <div id="topGainers">-</div>
+            </div>
+            <div class="highlight-card">
+                <h3>🔴 Top 5 Losers (24h)</h3>
+                <div id="topLosers">-</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auth System
+        const users = {};
+        let currentUser = null;
+
+        // Check if user is already logged in
+        function checkAuth() {
+            const savedUser = JSON.parse(sessionStorage.getItem('currentUser') || 'null');
+            if (savedUser) {
+                currentUser = savedUser;
+                showDashboard();
+            }
+        }
+
+        // Show Login Page
+        function showLogin() {
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        // Show Register Page
+        function showRegister() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('registerPage').classList.remove('hidden');
+            document.getElementById('dashboard').classList.add('hidden');
+        }
+
+        // Show Dashboard
+        function showDashboard() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('userName').textContent = currentUser.name;
+            
+            // Start fetching data
+            fetchData();
+            setupAutoRefresh();
+        }
+
+        // Handle Registration
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            const alertBox = document.getElementById('registerAlert');
+            
+            // Validation
+            if (password !== confirmPassword) {
+                alertBox.textContent = 'Passwords do not match!';
+                alertBox.classList.remove('hidden');
+                return;
+            }
+            
+            if (users[email]) {
+                alertBox.textContent = 'An account with this email already exists!';
+                alertBox.classList.remove('hidden');
+                return;
+            }
+            
+            // Create user
+            users[email] = {
+                name: name,
+                email: email,
+                password: password
+            };
+            
+            // Show success and redirect to login
+            alertBox.textContent = 'Account created successfully! Please sign in.';
+            alertBox.classList.remove('alert-error');
+            alertBox.classList.add('alert-success');
+            alertBox.classList.remove('hidden');
+            
+            // Reset form
+            document.getElementById('registerForm').reset();
+            
+            // Redirect to login after 2 seconds
+            setTimeout(() => {
+                showLogin();
+                alertBox.classList.add('hidden');
+                alertBox.classList.remove('alert-success');
+                alertBox.classList.add('alert-error');
+            }, 2000);
+        });
+
+        // Handle Login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const password = document.getElementById('loginPassword').value;
+            
+            const alertBox = document.getElementById('loginAlert');
+            
+            // Check credentials
+            if (!users[email]) {
+                alertBox.textContent = 'No account found with this email!';
+                alertBox.classList.remove('hidden');
+                return;
+            }
+            
+            if (users[email].password !== password) {
+                alertBox.textContent = 'Incorrect password!';
+                alertBox.classList.remove('hidden');
+                return;
+            }
+            
+            // Login successful
+            currentUser = users[email];
+            sessionStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            // Reset form
+            document.getElementById('loginForm').reset();
+            alertBox.classList.add('hidden');
+            
+            // Show dashboard
+            showDashboard();
+        });
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                currentUser = null;
+                sessionStorage.removeItem('currentUser');
+                
+                // Stop auto-refresh
+                if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+                if (countdownInterval) clearInterval(countdownInterval);
+                
+                showLogin();
+            }
+        }
+
+        // Crypto Tracker Code
+        let updateCount = 0;
+        let autoRefreshInterval = null;
+        let previousPrices = {};
+        let cryptoData = [];
+        let countdownInterval = null;
+        let isRunning = true;
+
+        async function fetchData() {
+            const numCoins = document.getElementById('numCoins').value;
+            const refreshBtn = document.getElementById('refreshBtn');
+            refreshBtn.disabled = true;
+
+            try {
+                const symbols = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'XRPUSDT', 'ADAUSDT', 
+                                'SOLUSDT', 'DOGEUSDT', 'DOTUSDT', 'MATICUSDT', 'LTCUSDT',
+                                'AVAXUSDT', 'SHIBUSDT', 'TRXUSDT', 'LINKUSDT', 'ATOMUSDT',
+                                'UNIUSDT', 'ETCUSDT', 'XLMUSDT', 'ALGOUSDT', 'VETUSDT'];
+                
+                const limit = Math.min(parseInt(numCoins), symbols.length);
+                const selectedSymbols = symbols.slice(0, limit);
+                
+                const tickerPromises = selectedSymbols.map(symbol =>
+                    fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${symbol}`)
+                        .then(res => res.json())
+                );
+                
+                const tickerData = await Promise.all(tickerPromises);
+                
+                const cryptoNames = {
+                    'BTCUSDT': 'Bitcoin', 'ETHUSDT': 'Ethereum', 'BNBUSDT': 'BNB',
+                    'XRPUSDT': 'Ripple', 'ADAUSDT': 'Cardano', 'SOLUSDT': 'Solana',
+                    'DOGEUSDT': 'Dogecoin', 'DOTUSDT': 'Polkadot', 'MATICUSDT': 'Polygon',
+                    'LTCUSDT': 'Litecoin', 'AVAXUSDT': 'Avalanche', 'SHIBUSDT': 'Shiba Inu',
+                    'TRXUSDT': 'TRON', 'LINKUSDT': 'Chainlink', 'ATOMUSDT': 'Cosmos',
+                    'UNIUSDT': 'Uniswap', 'ETCUSDT': 'Ethereum Classic', 'XLMUSDT': 'Stellar',
+                    'ALGOUSDT': 'Algorand', 'VETUSDT': 'VeChain'
+                };
+                
+                const data = tickerData.map(coin => ({
+                    symbol: coin.symbol.replace('USDT', ''),
+                    name: cryptoNames[coin.symbol] || coin.symbol,
+                    current_price: parseFloat(coin.lastPrice),
+                    price_change_percentage_24h: parseFloat(coin.priceChangePercent),
+                    market_cap: parseFloat(coin.quoteVolume) * parseFloat(coin.lastPrice)
+                }));
+                
+                cryptoData = data;
+                
+                updateCount++;
+                document.getElementById('updateCount').textContent = updateCount;
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+                
+                displayData(data);
+                displayHighlights(data);
+                
+                document.getElementById('errorMsg').classList.add('hidden');
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dataTable').style.display = 'table';
+                
+            } catch (error) {
+                console.error('Fetch error:', error);
+                const errorMsg = document.getElementById('errorMsg');
+                errorMsg.innerHTML = `<strong>⚠️ Error:</strong> Unable to fetch cryptocurrency data. Please try again.`;
+                errorMsg.classList.remove('hidden');
+                
+                if (autoRefreshInterval) {
+                    clearInterval(autoRefreshInterval);
+                    clearInterval(countdownInterval);
+                    isRunning = false;
+                    document.getElementById('toggleBtn').textContent = 'Resume';
+                    document.getElementById('nextUpdate').textContent = 'Stopped';
+                }
+            } finally {
+                refreshBtn.disabled = false;
+            }
+        }
+
+        function displayData(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            data.forEach((coin, index) => {
+                const symbol = coin.symbol.toUpperCase();
+                const currentPrice = coin.current_price;
+                
+                let trend = '●';
+                if (previousPrices[symbol]) {
+                    if (currentPrice > previousPrices[symbol]) trend = '↑';
+                    else if (currentPrice < previousPrices[symbol]) trend = '↓';
+                    else trend = '→';
+                }
+                previousPrices[symbol] = currentPrice;
+
+                const change24h = coin.price_change_percentage_24h || 0;
+                const changeClass = change24h >= 0 ? 'positive' : 'negative';
+                const trendClass = trend === '↑' ? 'trend-up' : trend === '↓' ? 'trend-down' : 'trend-neutral';
+
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${symbol}</strong></td>
+                        <td>${coin.name}</td>
+                        <td>$${currentPrice.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                        <td class="${trendClass}">${trend}</td>
+                        <td class="${changeClass}">${change24h >= 0 ? '+' : ''}${change24h.toFixed(2)}%</td>
+                        <td>${formatMarketCap(coin.market_cap)}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function displayHighlights(data) {
+            const gainers = data
+                .filter(c => c.price_change_percentage_24h > 0)
+                .sort((a, b) => b.price_change_percentage_24h - a.price_change_percentage_24h)
+                .slice(0, 5);
+
+            const losers = data
+                .filter(c => c.price_change_percentage_24h < 0)
+                .sort((a, b) => a.price_change_percentage_24h - b.price_change_percentage_24h)
+                .slice(0, 5);
+
+            const gainersHTML = gainers.map(coin => `
+                <div class="highlight-item">
+                    <span class="coin-name">${coin.symbol.toUpperCase()}</span> (${coin.name})
+                    <span class="positive"> +${coin.price_change_percentage_24h.toFixed(2)}%</span>
+                </div>
+            `).join('') || '<div class="highlight-item">No gainers found</div>';
+
+            const losersHTML = losers.map(coin => `
+                <div class="highlight-item">
+                    <span class="coin-name">${coin.symbol.toUpperCase()}</span> (${coin.name})
+                    <span class="negative"> ${coin.price_change_percentage_24h.toFixed(2)}%</span>
+                </div>
+            `).join('') || '<div class="highlight-item">No losers found</div>';
+
+            document.getElementById('topGainers').innerHTML = gainersHTML;
+            document.getElementById('topLosers').innerHTML = losersHTML;
+        }
+
+        function formatMarketCap(value) {
+            if (value >= 1e9) return `$${(value / 1e9).toFixed(2)}B`;
+            if (value >= 1e6) return `$${(value / 1e6).toFixed(2)}M`;
+            return `$${value.toLocaleString()}`;
+        }
+
+        function startCountdown() {
+            const interval = parseInt(document.getElementById('refreshInterval').value);
+            let remaining = interval;
+            
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            countdownInterval = setInterval(() => {
+                if (!isRunning) return;
+                remaining--;
+                if (remaining <= 0) {
+                    remaining = interval;
+                }
+                document.getElementById('nextUpdate').textContent = `${remaining}s`;
+            }, 1000);
+        }
+
+        function setupAutoRefresh() {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            const interval = parseInt(document.getElementById('refreshInterval').value) * 1000;
+            
+            if (isRunning) {
+                autoRefreshInterval = setInterval(fetchData, interval);
+                startCountdown();
+            }
+        }
+
+        function toggleAutoRefresh() {
+            isRunning = !isRunning;
+            const btn = document.getElementById('toggleBtn');
+            
+            if (isRunning) {
+                btn.textContent = 'Pause';
+                setupAutoRefresh();
+            } else {
+                btn.textContent = 'Resume';
+                if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+                if (countdownInterval) clearInterval(countdownInterval);
+                document.getElementById('nextUpdate').textContent = 'Paused';
+            }
+        }
+
+        function downloadCSV() {
+            if (cryptoData.length === 0) {
+                alert('No data available to download');
+                return;
+            }
+
+            const headers = ['Rank', 'Coin', 'Name', 'Price', '24h Change', 'Market Cap', 'Timestamp'];
+            const timestamp = new Date().toLocaleString();
+            
+            const rows = cryptoData.map((coin, index) => [
+                index + 1,
+                coin.symbol.toUpperCase(),
+                coin.name,
+                `${coin.current_price.toFixed(2)}`,
+                `${coin.price_change_percentage_24h?.toFixed(2)}%`,
+                formatMarketCap(coin.market_cap),
+                timestamp
+            ]);
+
+            const csvContent = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `crypto_data_${Date.now()}.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('numCoins').addEventListener('change', () => {
+            fetchData();
+            setupAutoRefresh();
+        });
+
+        document.getElementById('refreshInterval').addEventListener('change', setupAutoRefresh);
+
+        // Initialize - Check if user is logged in
+        checkAuth();
+    </script>
+</body>
+</html>
